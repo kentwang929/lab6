@@ -21,18 +21,48 @@ function addProjectDetails(e) {
 	// Prevent following the link
 	e.preventDefault();
 
+
 	// Get the div ID, e.g., "project3"
 	var projectID = $(this).closest('.project').attr('id');
 	// get rid of 'project' from the front of the id 'project3'
 	var idNumber = projectID.substr('project'.length);
 
+	var projectURL = "/project/" + idNumber;
+
+	$.get(projectURL, callBack);
 	console.log("User clicked on project " + idNumber);
 }
 
+function callBack(result) {
+	var projectID = result['id'];
+	var projSelect = "#project"+ projectID +" .thumbnail .details";
+
+	var projectHTML = '<img src=' + result['image'] + ' class = "detailsImage" >'
+	+ result['title'] + '<br><br>' + result['date'] + '<br><br>' + result['summary'];
+
+	var detail = $(projSelect).html(projectHTML);
+
+	console.log(result);
+};
 /*
  * Make an AJAX call to retrieve a color palette for the site
  * and apply it
  */
 function randomizeColors(e) {
 	console.log("User clicked on color button");
+}
+
+/* AJAX implementation
+*/
+
+$('#colorBtn').click(function(){
+	$('#wait').show();
+
+	// Get the div ID, e.g., "project3"
+	var projectID = $(this).closest('.project').attr('id');
+	$.get("/project/2", addProject);
+});
+
+function addProject(data){
+	console.log(data);
 }
